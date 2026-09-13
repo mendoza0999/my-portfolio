@@ -25,7 +25,8 @@ export default function Contact() {
     message: '',
   });
   const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState({ type: null, message: '' });
 
   const validate = () => {
     const newErrors = {};
@@ -46,20 +47,61 @@ export default function Contact() {
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
+    if (submitStatus.message) {
+      setSubmitStatus({ type: null, message: '' });
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validate();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    // TODO: Connect to email service (e.g., EmailJS, Formspree, or custom backend)
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    setTimeout(() => setSubmitted(false), 5000);
+
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: '445e722d-9f80-4d76-9414-e3a8d924e069',
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          from_name: `${formData.name} (Portfolio Contact)`,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitStatus({
+          type: 'success',
+          message: "Thank you! Your message has been sent successfully. I'll get back to you soon.",
+        });
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        setSubmitStatus({
+          type: 'error',
+          message: result.message || 'Something went wrong. Please try again or email directly.',
+        });
+      }
+    } catch (err) {
+      setSubmitStatus({
+        type: 'error',
+        message: 'Failed to send message. Please check your internet connection or email directly.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputClasses = (field) =>
@@ -197,16 +239,23 @@ export default function Contact() {
 
               <button
                 type="submit"
-                className="group inline-flex items-center gap-2 px-6 py-3 bg-black dark:bg-white text-white dark:text-black text-sm font-medium rounded-lg hover:opacity-90 transition-all duration-200"
+                disabled={isSubmitting}
+                className="group inline-flex items-center gap-2 px-6 py-3 bg-black dark:bg-white text-white dark:text-black text-sm font-medium rounded-lg hover:opacity-90 disabled:opacity-50 transition-all duration-200 cursor-pointer disabled:cursor-not-allowed"
               >
-                Send Message
-                <FiSend className="group-hover:translate-x-1 transition-transform" size={16} />
+                {isSubmitting ? 'Sending...' : 'Send Message'}
+                <FiSend className={`transition-transform ${isSubmitting ? 'animate-pulse' : 'group-hover:translate-x-1'}`} size={16} />
               </button>
 
-              {submitted && (
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-3">
-                  Thank you! Your message has been received. I'll get back to you soon.
-                </p>
+              {submitStatus.message && (
+                <div
+                  className={`text-sm p-4 rounded-lg border mt-3 transition-all ${
+                    submitStatus.type === 'success'
+                      ? 'border-black dark:border-white bg-black/5 dark:bg-white/5 text-black dark:text-white'
+                      : 'border-gray-500 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200'
+                  }`}
+                >
+                  {submitStatus.message}
+                </div>
               )}
             </form>
           </div>
