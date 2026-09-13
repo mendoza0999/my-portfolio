@@ -2,7 +2,7 @@ import {
   FaHtml5, FaCss3Alt, FaJsSquare, FaReact, FaMobileAlt, FaPhp,
   FaNodeJs, FaDatabase, FaGitAlt, FaGithub, FaBug, FaLinux,
   FaWindows, FaServer, FaPencilRuler, FaCogs, FaSearch,
-  FaFileAlt, FaBrain, FaRobot, FaCode, FaDesktop, FaPython,
+  FaFileAlt, FaBrain, FaRobot, FaCode, FaDesktop, Fapython,
 } from 'react-icons/fa';
 import { SiExpress, SiFastapi, SiTailwindcss, SiMysql } from 'react-icons/si';
 
