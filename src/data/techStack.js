@@ -41,9 +41,12 @@ export const techStack = [
   {
     category: 'AI Tools',
     items: [
+      { name: 'Gemini', level: 'Comfortable' },
+      { name: 'Claude', level: 'Comfortable' },
       { name: 'ChatGPT', level: 'Comfortable' },
       { name: 'AI Coding Assistants', level: 'Comfortable' },
       { name: 'Prompt Engineering', level: 'Comfortable' },
+
     ],
   },
 ];
