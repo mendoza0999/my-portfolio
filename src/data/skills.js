@@ -2,7 +2,7 @@ import {
   FaHtml5, FaCss3Alt, FaJsSquare, FaReact, FaMobileAlt, FaPhp,
   FaNodeJs, FaDatabase, FaGitAlt, FaGithub, FaBug, FaLinux,
   FaWindows, FaServer, FaPencilRuler, FaCogs, FaSearch,
-  FaFileAlt, FaBrain, FaRobot, FaCode, FaDesktop,
+  FaFileAlt, FaBrain, FaRobot, FaCode, FaDesktop, Fapython
 } from 'react-icons/fa';
 import { SiExpress, SiFastapi, SiTailwindcss, SiMysql } from 'react-icons/si';
 
@@ -26,6 +26,7 @@ export const skillCategories = [
       { name: 'Express.js', icon: SiExpress },
       { name: 'REST APIs', icon: FaServer },
       { name: 'FastAPI', icon: SiFastapi },
+      { name: 'Python', icon: FaPython },
     ],
   },
   {
